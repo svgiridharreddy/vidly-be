@@ -1,18 +1,9 @@
+const asyncMiddleWare = require('../middleware/async');
 const auth = require('../middleware/authentication');
 const admin = require("../middleware/admin");
 const express = require('express');
 const router = express.Router();
 const {Genre, validate} = require('../models/genre');
-
-function asyncMiddleWare(handler){
-  return async(req,res,next) => {
-    try {
-      await handler(req,res)
-    } catch (error) {
-      next(error)
-    }
-  }
-}
 
 router.get("/",asyncMiddleWare(async (req,res) => {
     const genres = await Genre.find().sort('name');
@@ -20,13 +11,13 @@ router.get("/",asyncMiddleWare(async (req,res) => {
   })
 )
 
-router.get("/:id", async(req,res) => {
+router.get("/:id", asyncMiddleWare(async(req,res) => {
   const genre = await Genre.findById(req.params.id);
   if(!genre) return res.status(404).send("Genre with given ID is not found");
   res.send({genre, message: "success", status: 200});
-})
+}))
 
-router.post("/",auth, async (req,res) => {
+router.post("/",auth, asyncMiddleWare(async (req,res) => {
   const {error} = validate(req.body)
   if(error) {
     res.status(400).send(error.details[0].message);
@@ -36,21 +27,21 @@ router.post("/",auth, async (req,res) => {
   })
   await genre.save();
   res.status(200).send({genre, message: "created successfully", status: 200});
-})
+}))
 
-router.put("/:id",auth, async (req, res) => {
+router.put("/:id",auth, asyncMiddleWare(async (req, res) => {
   const { error } = validate(req.body)
   if(error) return res.status(400).send(error.details[0].message);
   const genre = await Genre.findById(req.params.id);
   if(!genre) return res.status(404).send("Genre with given ID is not found");
   genre.name = req.body.name;
   res.status(200).send({genre, message: "updated successfully",status: 200});
-})
+}))
 
-router.delete("/:id",[auth,admin], async (req,res) => {
+router.delete("/:id",[auth,admin], asyncMiddleWare(async (req,res) => {
   const genre = await Genre.findByIdAndRemove(req.params.id);
   if(!genre) return res.status(404).send("Genre with given ID is not found")
   res.send({genre, message: "Deleted successfully", status: 200});
-})
+}))
 
 module.exports = router;
