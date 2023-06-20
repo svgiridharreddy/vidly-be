@@ -31,6 +31,11 @@ const home = require("./routes/home");
 const express = require('express');
 const app = express();
 
+process.on("uncaughtException",(ex) => {
+  console.log(ex);
+  winston.error(ex.message,ex)
+})
+
 winston.add(winston.transports.File, {filename: 'logFile.log'})
 //in below code winston-mongodb package is used to log the error messages to db. It will create a new collection(log) in db with error messages.
 // winston.add(winston.transports.mongoose,{db: 'mongodb://127.0.0.1:27017/vidly-be'})
@@ -50,6 +55,8 @@ if(!config.get("jwtPrivateKey")){
 mongoose.connect("mongodb://127.0.0.1:27017/vidly-be")
 .then(console.log("Connected to mongodb..."))
 .catch((err) => console.error("mongodb not connected",err))
+
+throw new Error("Cought exception")
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
