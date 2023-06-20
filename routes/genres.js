@@ -4,14 +4,21 @@ const express = require('express');
 const router = express.Router();
 const {Genre, validate} = require('../models/genre');
 
-router.get("/",async (req,res) => {
-  try {
+function asyncMiddleWare(handler){
+  return async(req,res,next) => {
+    try {
+      await handler(req,res)
+    } catch (error) {
+      next(error)
+    }
+  }
+}
+
+router.get("/",asyncMiddleWare(async (req,res) => {
     const genres = await Genre.find().sort('name');
     res.send({genres, message: "success", status: 200});
-  } catch (error) {
-    next(error);
-  }
-})
+  })
+)
 
 router.get("/:id", async(req,res) => {
   const genre = await Genre.findById(req.params.id);
