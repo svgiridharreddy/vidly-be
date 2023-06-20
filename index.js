@@ -2,6 +2,7 @@ const error = require("./middleware/error");
 require('express-async-errors'); // this is npm package that will work something like asyncMiddleWare by monkeyPatching. If this doen't work then uncomment the require statement of asyncMiddleWare and pass router handlers to asyncMiddleWare in genres api.
 
 const winston = require('winston');
+require('winston-mongodb');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
@@ -31,6 +32,14 @@ const express = require('express');
 const app = express();
 
 winston.add(winston.transports.File, {filename: 'logFile.log'})
+//in below code winston-mongodb package is used to log the error messages to db. It will create a new collection(log) in db with error messages.
+// winston.add(winston.transports.mongoose,{db: 'mongodb://127.0.0.1:27017/vidly-be'})
+//winston.add(winston.transports.mongoose,{db: 'mongodb://127.0.0.1:27017/vidly-be',level: 'error}) // refer documentation for more on setting log level and other options 
+
+
+
+
+
 // load the environment variable at the time of application start. If no env variable is found app should not be run. This to make sure to send JWT Token in response.
 console.log("private key is :",config.get("jwtPrivateKey")) // variable is not loading from environment variables. By passing using staic key loaded from development.json config file
 if(!config.get("jwtPrivateKey")){
