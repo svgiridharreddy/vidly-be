@@ -1,3 +1,4 @@
+const error = import("./middleware/error")
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
@@ -51,9 +52,7 @@ app.use("/api/rentals",rentals);
 app.use("/",home);
 app.set("view engine","pug");
 
-app.use(function(err,req,res,next){
-  res.status(500).send("Something failed.")
-})
+app.use(error);
 
 
 if(app.get("env") === "development") {
