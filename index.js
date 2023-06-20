@@ -1,5 +1,7 @@
-const error = import("./middleware/error");
+const error = require("./middleware/error");
 require('express-async-errors'); // this is npm package that will work something like asyncMiddleWare by monkeyPatching. If this doen't work then uncomment the require statement of asyncMiddleWare and pass router handlers to asyncMiddleWare in genres api.
+
+const winston = require('winston');
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
@@ -28,6 +30,7 @@ const home = require("./routes/home");
 const express = require('express');
 const app = express();
 
+winston.add(winston.transports.File, {filename: 'logFile.log'})
 // load the environment variable at the time of application start. If no env variable is found app should not be run. This to make sure to send JWT Token in response.
 console.log("private key is :",config.get("jwtPrivateKey")) // variable is not loading from environment variables. By passing using staic key loaded from development.json config file
 if(!config.get("jwtPrivateKey")){
