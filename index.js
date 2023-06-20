@@ -1,4 +1,5 @@
-const error = import("./middleware/error")
+const error = import("./middleware/error");
+require('express-async-errors'); // this is npm package that will work something like asyncMiddleWare by monkeyPatching. If this doen't work then uncomment the require statement of asyncMiddleWare and pass router handlers to asyncMiddleWare in genres api.
 const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
