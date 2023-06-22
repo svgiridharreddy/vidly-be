@@ -33,7 +33,6 @@ const app = express();
 
 process.on("uncaughtException",(ex) => {
   console.log(ex);
-  console.log(ex.message)
   winston.error(ex.message,ex)
 })
 
