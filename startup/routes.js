@@ -7,6 +7,8 @@ const helmet = require("helmet");
 const morgan = require('morgan');
 const debug = require('debug')("app:startup")
 
+require('express-async-errors'); // this is npm package that will work something like asyncMiddleWare by monkeyPatching. If this doen't work then uncomment the require statement of asyncMiddleWare and pass router handlers to asyncMiddleWare in genres api.
+
 // Routes
 const genres = require('../routes/genres');
 const customers = require("../routes/customers");
@@ -32,4 +34,9 @@ module.exports = function (app){
   app.use("/",home);
   app.use(error);
   app.set("view engine","pug");
+
+  if(app.get("env") === "development") {
+    debug("in development mode")
+    app.use(morgan('tiny'));
+  }
 }
