@@ -3,7 +3,6 @@ const config = require('config');
 const mongoose = require("mongoose");
 const Joi = require('joi');
 
-
 const userSchema = new mongoose.Schema({
   name: {type: String, minLength: 3, maxLength: 50, trim: true, required: true},
   email: {type: String, trim: true, required: true, unique: true, minLength: 3, maxLength: 255},

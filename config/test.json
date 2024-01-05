@@ -1,0 +1,5 @@
+{
+  "name": "Vidly backend - development",
+  "version": "1.0.0",
+  "jwtPrivateKey": "vidly_scret_key"
+}
