@@ -1,5 +1,6 @@
 {
   "name": "Vidly backend - development",
   "version": "1.0.0",
-  "jwtPrivateKey": "vidly_scret_key"
+  "jwtPrivateKey": "vidly_scret_key",
+  "db": "mongodb://127.0.0.1:27017/vidly-be-tests"
 }

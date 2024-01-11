@@ -1,18 +1,20 @@
 // const asyncMiddleWare = require('../middleware/async');
+const validateObjectId = require('../middleware/validateObjectId');
 const auth = require('../middleware/authentication');
 const admin = require("../middleware/admin");
 const express = require('express');
 const router = express.Router();
 const {Genre, validate} = require('../models/genre');
+const { default: mongoose } = require('mongoose');
 
 router.get("/",async (req,res) => {
-  throw new Error("Something went wrong");
+  // throw new Error("Something went wrong");
     const genres = await Genre.find().sort('name');
     res.send({genres, message: "success", status: 200});
   }
 )
 
-router.get("/:id", async(req,res) => {
+router.get("/:id", validateObjectId, async(req,res) => {
   const genre = await Genre.findById(req.params.id);
   if(!genre) return res.status(404).send("Genre with given ID is not found");
   res.send({genre, message: "success", status: 200});

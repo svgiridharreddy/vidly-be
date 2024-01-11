@@ -1,6 +1,6 @@
 // winstong - used  for logging 
 const winston = require('winston');
-require('winston-mongodb');
+// require('winston-mongodb');
 
 require('express-async-errors'); // this is npm package that will work something like asyncMiddleWare by monkeyPatching. If this doen't work then uncomment the require statement of asyncMiddleWare and pass router handlers to asyncMiddleWare in genres api.
 
@@ -12,10 +12,10 @@ module.exports = function(){
   // }) 
 
   //winston built in method to handle uncaughtException 
-  winston.handleExceptions(
-    new winston.transports.Console({colorize: true, prettyPrint: true}),
-    new winston.transports.File, {filename: 'uncaughtExceptions.log'}
-  )
+  // winston.handleExceptions(
+  //   new winston.transports.Console({colorize: true, prettyPrint: true}),
+  //   new winston.transports.File, {filename: 'uncaughtExceptions.log'}
+  // )
 
   process.on("unhandledRejection",(ex) => {
   throw ex; // winston don't have helper method to handle promise rejections. So    simply unhandle the exception here, so winston will catch it in the above handleExceptions
